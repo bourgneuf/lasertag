@@ -34,82 +34,91 @@ void setup()
   sei();//allow interrupts
 }
 
+bool tir_pret = true;
+
 void loop() // run over and over
 {
-  if(digitalRead(gachette))
+  if(tir_pret == true && digitalRead(gachette))
   {
     send_id(123);
     digitalWrite(led_rouge, HIGH);
-    delay(50);
+    tir_pret = false;
   }
-  else digitalWrite(led_rouge, LOW);
+  if(!digitalRead(gachette)) tir_pret = true;
+  
+  send_id(0);
 }
 
 
-#define TEMPS_HIGH 1000
-void send_id(byte id)
-{
-  String myStr = String(id,BIN);
-  int zeros = 8 - myStr.length();
-  
-  unsigned long debut = micros();
-  
-/*  if(debut > 4294937) return; */ //Ne pas tir quand le compteur est proche de l'overflow
-  
-  //9 * HIGH
-  enable_frequence = 1;
-  while((micros()-debut) < 9*TEMPS_HIGH);
-  
-  //1 * LOW (+9)
-  enable_frequence = 0;
-  while((micros()-debut) < 10*TEMPS_HIGH);
-  
-  //les zeros du debut
-  int nb_bit = 10;
 
-  for (int i=0; i<zeros; i++)
+
+#define TEMPS_HIGH 1000
+int send_id(byte id)
+{
+  static int etat=0;
+  static unsigned long debut;
+  static String myStr;
+  static int bits;
+  
+  if(etat==0)
   {
-    //niveau HIGH
-    nb_bit++;
-    enable_frequence = 1;
-    while((micros()-debut) < nb_bit*TEMPS_HIGH);
-    
-    //niveau LOW
-    nb_bit++;
-    enable_frequence = 0;
-    while((micros()-debut) < nb_bit*TEMPS_HIGH);
+    if(id != 0)
+    {
+      myStr = String(id,BIN);
+      while(myStr.length() < 8) myStr = "0"+myStr; //myStr.concat(String('0'),myStr);
+      
+      Serial.println(myStr);
+      debut = micros();
+      etat=1;
+    }
+    else return 0;
   }
   
-  //les bits restants
-  for (int i=0; i<myStr.length(); i++)
+  else if(etat==1)
   {
-    //niveau HIGH
-    nb_bit++;
     enable_frequence = 1;
-    while((micros()-debut) < nb_bit*TEMPS_HIGH);
-    
-    //niveau du bit
-    nb_bit++;
-    if(myStr[i]=='0')
+    if((micros()-debut) >= 9*TEMPS_HIGH)
     {
-      enable_frequence = 0;
-      while((micros()-debut) < nb_bit*TEMPS_HIGH);
+      etat=2;
+    }
+  }
+  
+  else if(etat==2)
+  {
+    enable_frequence = 0;
+    if((micros()-debut) >= 10*TEMPS_HIGH)
+    {
+      etat=10;
+      bits=-1;
+    }
+  }
+  
+  else if(etat>=10 && etat <= 25)
+  {
+    if(etat%2 == 0)
+    {
+      enable_frequence = 1;
+      if((micros()-debut) >= (etat+1)*TEMPS_HIGH) { bits++; etat++; }
     }
     else
     {
-      enable_frequence = 1;
-      while((micros()-debut) < nb_bit*TEMPS_HIGH);
+      if(myStr[bits]=='0') enable_frequence = 0;
+      else enable_frequence = 1;
+      if((micros()-debut) >= (etat+1)*TEMPS_HIGH) etat++;
     }
   }
   
-  
-  //niveau HIGH de la fin
-  nb_bit++;
-  enable_frequence = 1;
-  while((micros()-debut) < nb_bit*TEMPS_HIGH);
-  
-  //remise a zero
-  enable_frequence = 0;
+  else if(etat == 26)
+  {
+    enable_frequence = 1;
+    if((micros()-debut) >= (etat+1)*TEMPS_HIGH)
+    {
+      etat=0;
+      enable_frequence = 0;
+    }
+  }
+
+  return 1;
 }
 
 
