@@ -1,4 +1,7 @@
 int led = 6;
+int led_rouge = 13;
+int gachette = A3;
+
 boolean toggle0 = 0;
 boolean enable_frequence = 0;
 
@@ -9,10 +12,11 @@ void setup()
   Serial.println("Hello !!");
   
   pinMode(led, OUTPUT);
-  pinMode(13, OUTPUT);
   digitalWrite(led, HIGH);
   
-  pinMode(A3, INPUT);
+  pinMode(led_rouge, OUTPUT);
+  
+  pinMode(gachette, INPUT);
 
   cli();//stop interrupts
   //set timer1 interrupt at 1Hz
@@ -32,14 +36,15 @@ void setup()
 
 void loop() // run over and over
 {
-  if(digitalRead(A3))
+  if(digitalRead(gachette))
   {
     send_id(123);
-    digitalWrite(13, HIGH);
+    digitalWrite(led_rouge, HIGH);
     delay(50);
   }
-  else digitalWrite(13, LOW);
+  else digitalWrite(led_rouge, LOW);
 }
+
 
 #define TEMPS_HIGH 1000
 void send_id(byte id)
