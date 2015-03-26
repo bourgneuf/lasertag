@@ -65,7 +65,7 @@ void loop() // run over and over
   
   
   
-  u8g.drawBitmapP( (imgX*8), imgY, 1, 1, (img_logo+(imgY+16)+imgX));
+  u8g.drawBitmapP( (imgX*8), imgY, 1, 1, &img_logo[(imgY+16)+imgX]);
   imgX++;
   if(imgX>16) { imgX=0; imgY++; }
   if(imgY>64) imgY=0;
