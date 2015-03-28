@@ -7,7 +7,6 @@ int gachette = A3;
 
 boolean toggle0 = 0;
 boolean enable_frequence = 0;
-bool tir_pret;
 
 U8GLIB_SH1106_128X64 u8g(U8G_I2C_OPT_NONE);
 
@@ -16,6 +15,9 @@ const uint8_t img_score[] PROGMEM = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,112,112,0,0
 
 int imgX;
 int imgY;
+
+int munition = 500;
+int mode_tir = 3;
 
 void setup()  
 {
@@ -30,7 +32,6 @@ void setup()
   
   pinMode(gachette, INPUT);
   
-  tir_pret = true;
   
   imgX = 0;
   imgY = -1;
@@ -56,14 +57,19 @@ void loop() // run over and over
 {
   digitalWrite(led_rouge, HIGH);
   
-  if(tir_pret == true && digitalRead(gachette))
+  if(mode_tir > 0 && digitalRead(gachette))
   {
     send_id(123);
-    tir_pret = false;
+    mode_tir--;
   }
-  if(!digitalRead(gachette)) tir_pret = true;
+  if(!digitalRead(gachette)) mode_tir = 1;
   
   send_id(0);
+  
+  
+  
+  
+  
   
   
   if(imgY==-2)
