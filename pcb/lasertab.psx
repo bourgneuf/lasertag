@@ -7,8 +7,10 @@
 0805||2
 1206||2
 1210||2
+IS31AP2005||8
 NRF24L01||8
 Quartz 32.768k||4
 Resistance mini||2
 Resistance traversante||2
+SOT-223_3MC||3
 STM32F051K8T6||32
