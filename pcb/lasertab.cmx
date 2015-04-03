@@ -8,6 +8,7 @@ CONN_SIL_4||#DSC=4||@Manufacturer_Part_Number=||@Manufacturer_Name=||@RS Part Nu
 CONN_SIL_5||#DSC=5||@Manufacturer_Part_Number=||@Manufacturer_Name=||@RS Part Number=||@Allied_Number=||@Other Part Number=||@3D Package=||@Height=
 GND
 IS31AP2005||#MSOP=8||@Manufacturer_Part_Number=||@Manufacturer_Name=||@RS Part Number=||@Allied_Number=||@Other Part Number=||@3D Package=||@Height=
+led cms 2mA||#0805=2||@Manufacturer_Part_Number=||@Manufacturer_Name=||@RS Part Number=||@Allied_Number=||@Other Part Number=||@3D Package=||@Height=||#USER=2||@RS Part Number=||@Allied_Number=||@Manufacturer_Name=||@Manufacturer_Part_Number=||@Other Part Number=||@3D Package=||@Height=
 MCP1703||#SOT-223_3MC=3||@Manufacturer_Part_Number=||@Manufacturer_Name=||@RS Part Number=||@Allied_Number=||@Other Part Number=||@3D Package=||@Height=
 NRF24L01||#USER=8||@Manufacturer_Part_Number=||@Manufacturer_Name=||@RS Part Number=||@Allied_Number=||@Other Part Number=||@3D Package=||@Height=
 Quartz 32.768k||#CMS=4||@Manufacturer_Part_Number=||@Manufacturer_Name=||@RS Part Number=814-9374||@Allied_Number=||@Other Part Number=||@3D Package=||@Height=
